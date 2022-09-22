@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
+import { getMergeSortAnimations } from '../../algorithms/mergeSort';
 import './Body.css'
 
+const ANNIMATION_SPEED_MS = 1;
 const PRIMARY_COLOR = 'turquoise';
+const SECONDARY_COLOR = 'red';
 const NUMBER_OF_ARRAY_BARS = 200;
 
 export default class Body extends Component {
@@ -31,6 +34,37 @@ export default class Body extends Component {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+    resetArray() {
+        const array = [];
+        for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
+            array.push(this.randomIntFromInterval(5, 730))
+        }
+        this.setState({ array })
+    }
+
+    mergeSort() {
+        const annimations = getMergeSortAnimations(this.state.array);
+        for (let i = 0; i < annimations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = i % 3 !== 2;
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = annimations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANNIMATION_SPEED_MS)
+            } else {
+                setTimeout(() => {
+                    const [barOneIdx, newHeight] = annimations[i];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    barOneStyle.height = `${newHeight}px`;
+                }, i * ANNIMATION_SPEED_MS);
+            }
+        }
+    }
 
 
     render() {
@@ -50,7 +84,11 @@ export default class Body extends Component {
 
                     </div>
                 ))}
-                <button>Generate New Array</button>
+                <button onClick={() => this.resetArray()}>Generate New Array</button>
+                <button onClick={() => this.mergeSort()} >Merge Sort</button>
+                <button>Quick Sort</button>
+                <button>Heap Sort</button>
+                <button>Bubble Sort</button>
             </div>
         )
     }
