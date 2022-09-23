@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { getMergeSortAnimations } from '../../algorithms/mergeSort';
 import './Body.css'
 
-const ANNIMATION_SPEED_MS = 1;
+const ANNIMATION_SPEED_MS = 10;
 const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
-const NUMBER_OF_ARRAY_BARS = 200;
+const NUMBER_OF_ARRAY_BARS = 15;
 
 export default class Body extends Component {
     constructor(props) {
@@ -60,6 +60,7 @@ export default class Body extends Component {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = annimations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
+                    arrayBars[barOneIdx].textContent = newHeight;
                     barOneStyle.height = `${newHeight}px`;
                 }, i * ANNIMATION_SPEED_MS);
             }
@@ -81,7 +82,7 @@ export default class Body extends Component {
                             height: `${value}px`
                         }}
                     >
-
+                        {value}
                     </div>
                 ))}
                 <button onClick={() => this.resetArray()}>Generate New Array</button>
